@@ -50,7 +50,7 @@ async function run() {
             const filter = { _id: ObjectId(id) };
             const result = await products.deleteOne(filter);
             res.send(result);
-        })
+        });
 
         app.post("/reviews", async (req, res) => {
             const result = await reviews.insertOne(req.body);
@@ -68,7 +68,7 @@ async function run() {
         app.get("/news", async (req, res) => {
             const result = await news.find({}).toArray();
             res.send(result);
-        })
+        });
 
         app.post("/orders", async (req, res) => {
             const result = await orders.insertOne(req.body);
@@ -114,7 +114,7 @@ async function run() {
             const filter = { email: email };
             const result = await users.findOne(filter);
             res.send(result);
-        })
+        });
     }
     finally {
 
