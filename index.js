@@ -115,6 +115,20 @@ async function run() {
             const result = await users.findOne(filter);
             res.send(result);
         });
+        app.put("/users/carts/:email", async (req, res) => {
+            const email = req.params.email;
+            const cart = req.body;
+            console.log(cart);
+            const filter = { email: email };
+            const doc = {
+                $set: {
+                    cart: cart
+                }
+            }
+            const option = { upsert: true };
+            const result = await users.updateOne(filter, doc, option);
+            res.json(result);
+        });
     }
     finally {
 
