@@ -71,6 +71,36 @@ async function run(client, app) {
             const result = await products.find(quary).toArray();
             res.send(result);
         })
+        //get product by type
+        app.get("/products/type/:type", async (req, res) => {
+            let typeName = [];
+            const type = req.params.type;
+            if (!type.includes("&&")) {
+                typeName = [type];
+            }
+            else {
+                const types = type.split("&&");
+                typeName = types;
+            };
+            const quary = {
+                type: {
+                    $in: typeName
+                }
+            };
+            const result = await products.find(quary).toArray();
+            res.send(result);
+        });
+        //product by price range
+        app.get("/productsByPrice", async (req, res) => {
+            const from = req.query.from;
+            const till = req.query.till;
+            const quary = {
+                price: { $gte: from },
+                price: { $lt: till }
+            };
+            const result = await products.find(quary).toArray();
+            res.send(result);
+        })
         app.put("/products", async (req, res) => {
             const id = req.body.id;
             const filter = { _id: ObjectId(id) };
