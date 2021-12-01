@@ -14,14 +14,17 @@ async function run(client, app) {
             const result = await products.insertOne(req.body);
             res.json(result);
         });
+        //get all products
         app.get("/products", async (req, res) => {
             const result = await products.find({}).toArray();
             res.send(result)
         });
+        //products for home page
         app.get("/products/home", async (req, res) => {
             const result = await products.find({}).limit(8).toArray();
             res.send(result)
         });
+        // get product by id
         app.get("/products/:id", async (req, res) => {
             const id = req.params.id;
             if (id.startsWith("&&")) {
@@ -31,7 +34,6 @@ async function run(client, app) {
                 for (const id of sliced) {
                     arryOfId.push(ObjectId(id));
                 }
-                console.log(arryOfId);
                 const quary = {
                     _id: {
                         $in: arryOfId
@@ -125,6 +127,12 @@ async function run(client, app) {
             const result = await reviews.find({}).toArray();
             res.send(result);
         });
+        app.get("/reviews/:email", async (req, res) => {
+            const email = req.params.email;
+            const quary = { email: email };
+            const result = await reviews.find(quary).toArray();
+            res.send(result);
+        })
 
 
         //news part
@@ -145,7 +153,13 @@ async function run(client, app) {
         });
         app.get("/orders", async (req, res) => {
             const result = await orders.find({}).toArray();
-            res.send(result)
+            res.send(result);
+        });
+        app.get("/orders/:email", async (req, res) => {
+            const email = req.params.email;
+            const quary = { email: email };
+            const result = await orders.find(quary).toArray();
+            res.send(result);
         });
         app.put("/orders", async (req, res) => {
             const id = req.body.id;
@@ -189,7 +203,6 @@ async function run(client, app) {
         app.put("/users/carts/:email", async (req, res) => {
             const email = req.params.email;
             const cart = req.body;
-            console.log(cart);
             const filter = { email: email };
             const doc = {
                 $set: {
