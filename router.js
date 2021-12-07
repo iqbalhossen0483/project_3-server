@@ -48,6 +48,15 @@ async function run(client, app) {
                 res.send(result);
             }
         });
+
+        //category product
+        app.get("/products/category/:name", async (req, res) => {
+            const categoryName = req.params.name;
+            const quary = { category: categoryName };
+            const result = await products.find(quary).toArray();
+            res.send(result);
+        })
+
         //get rendom product
         app.get("/products/rendom/:num", async (req, res) => {
             const number = parseInt(req.params.num);
