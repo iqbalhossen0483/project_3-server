@@ -104,7 +104,8 @@ async function products() {
             res.send(result);
         });
         //product by price range
-        productRouter.get("/productsByPrice", async (req, res) => {
+
+        productRouter.get("/price/byrange", async (req, res) => {
             const from = req.query.from;
             const till = req.query.till;
             const quary = {
