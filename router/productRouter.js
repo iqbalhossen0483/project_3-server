@@ -37,15 +37,15 @@ async function products() {
 
         //category product
         productRouter.get("/category/:name", async (req, res) => {
-            const categoryName = req.name;
+            const categoryName = req.params.name;
             const quary = { category: categoryName };
             const result = await products.find(quary).toArray();
             res.send(result);
         })
 
         //get rendom product
-        productRouter.get("rendom/:num", async (req, res) => {
-            const number = parseInt(req.num);
+        productRouter.get("/rendom/:num", async (req, res) => {
+            const number = parseInt(req.params.num);
             const result = await products.find({}).skip(number).limit(1).toArray();
             res.send(result);
         });
