@@ -11,57 +11,41 @@ async function products() {
         const database = client.db("cycle-mart");
         const products = database.collection("products");
 
-        //products part
-        productRouter.post("/", async (req, res) => {
-            const result = await products.insertOne(req.body);
-            res.json(result);
-        });
-        //get all products
-        productRouter.get("/", async (req, res) => {
-            const result = await products.find({}).toArray();
-            res.send(result)
-        });
+        productRouter.route("/")
+            .get(async (req, res) => {
+                const result = await products.find({}).toArray();
+                res.send(result)
+            })
+            .post(async (req, res) => {
+                const result = await products.insertOne(req.body);
+                res.json(result);
+            })
+            .put(async (req, res) => {
+                const id = req.body.id;
+                const filter = { _id: ObjectId(id) };
+                const updateDoc = { $set: req.body }
+                const result = await products.updateOne(filter, updateDoc);
+                res.json(result);
+            })
+
         //products for home page
         productRouter.get("/home", async (req, res) => {
             const result = await products.find({}).limit(8).toArray();
             res.send(result)
         });
-        // get product by id
-        productRouter.get("/:id", async (req, res) => {
-            const id = req.params.id;
-            if (id.startsWith("&&")) {
-                const splitId = id.split("&&");
-                const sliced = splitId.slice(1, splitId.length);
-                const arryOfId = [];
-                for (const id of sliced) {
-                    arryOfId.push(ObjectId(id));
-                }
-                const quary = {
-                    _id: {
-                        $in: arryOfId
-                    }
-                }
-                const result = await products.find(quary).toArray();
-                res.send(result);
-            }
-            else {
-                const quary = { _id: ObjectId(id) };
-                const result = await products.findOne(quary);
-                res.send(result);
-            }
-        });
+
 
         //category product
         productRouter.get("/category/:name", async (req, res) => {
-            const categoryName = req.params.name;
+            const categoryName = req.name;
             const quary = { category: categoryName };
             const result = await products.find(quary).toArray();
             res.send(result);
         })
 
         //get rendom product
-        productRouter.get("/rendom/:num", async (req, res) => {
-            const number = parseInt(req.params.num);
+        productRouter.get("rendom/:num", async (req, res) => {
+            const number = parseInt(req.num);
             const result = await products.find({}).skip(number).limit(1).toArray();
             res.send(result);
         });
@@ -103,8 +87,8 @@ async function products() {
             const result = await products.find(quary).toArray();
             res.send(result);
         });
-        //product by price range
 
+        //product by price range
         productRouter.get("/price/byrange", async (req, res) => {
             const from = req.query.from;
             const till = req.query.till;
@@ -115,13 +99,33 @@ async function products() {
             const result = await products.find(quary).toArray();
             res.send(result);
         })
-        productRouter.put("/", async (req, res) => {
-            const id = req.body.id;
-            const filter = { _id: ObjectId(id) };
-            const updateDoc = { $set: req.body }
-            const result = await products.updateOne(filter, updateDoc);
-            res.json(result);
+
+        // get product by id
+        productRouter.get("/:id", async (req, res) => {
+            const id = req.params.id;
+            if (id.startsWith("&&")) {
+                const splitId = id.split("&&");
+                const sliced = splitId.slice(1, splitId.length);
+                const arryOfId = [];
+                for (const id of sliced) {
+                    arryOfId.push(ObjectId(id));
+                }
+                const quary = {
+                    _id: {
+                        $in: arryOfId
+                    }
+                }
+                const result = await products.find(quary).toArray();
+                res.send(result);
+            }
+            else {
+                const quary = { _id: ObjectId(id) };
+                const result = await products.findOne(quary);
+                res.send(result);
+            }
         });
+
+        //delete product by id
         productRouter.delete("/:id", async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) };
