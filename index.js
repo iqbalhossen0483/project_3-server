@@ -6,6 +6,7 @@ const reviewsRouter = require("./router/reviewsRouter");
 const newsRouter = require("./router/newsRouter");
 const ordersRouter = require("./router/ordersRouter");
 const usersRouter = require("./router/usersRouter");
+const menuRouter = require("./router/MenusRouter");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -34,6 +35,9 @@ async function run() {
 
         //users part
         app.use("/users", usersRouter);
+
+        //menus
+        app.use("/menus", menuRouter);
     }
     finally {
 
