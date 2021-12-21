@@ -16,9 +16,11 @@ async function products() {
                 const result = await products.find({}).toArray();
                 res.send(result)
             })
-            .post(async (req, res) => {
-                const result = await products.insertOne(req.body);
-                res.json(result);
+            .post((req, res) => {
+                console.log(req.body);
+                products.insertOne(req.body)
+                    .then(result => res.send(result))
+                    .catch(err => res.send(err.message))
             })
             .put(async (req, res) => {
                 const id = req.body.id;
