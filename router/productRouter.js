@@ -17,10 +17,9 @@ async function products() {
                 res.send(result)
             })
             .post((req, res) => {
-                console.log(req.body);
                 products.insertOne(req.body)
                     .then(result => res.send(result))
-                    .catch(err => res.send(err.message))
+                    .catch(err => res.send(err))
             })
             .put(async (req, res) => {
                 const id = req.body.id;
