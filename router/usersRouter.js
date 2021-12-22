@@ -34,7 +34,7 @@ async function users() {
                         admin: true,
                         user
                     }, process.env.JWT_SECRATE, {
-                        expiresIn: "1h"
+                        expiresIn: "10h"
                     });
                     res.send({
                         admin: true,
