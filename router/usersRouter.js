@@ -1,9 +1,7 @@
 const express = require("express");
 const mongoDb = require("../mongoDb");
 const jwt = require('jsonwebtoken');
-const { ObjectId } = require("mongodb");
 const checkUser = require("../middleWare/userMiddleware");
-const { rules } = require("nodemon/lib/rules");
 
 
 const usersRouter = express.Router();

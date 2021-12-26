@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoDb = require("../mongoDb");
 const ObjectId = require('mongodb').ObjectId;
+const checkUser = require("../middleWare/userMiddleware")
 
 const productRouter = express.Router();
 const client = mongoDb();
