@@ -1,4 +1,5 @@
 const express = require("express");
+const checkUser = require("../middleWare/userMiddleware");
 const mongoDb = require("../mongoDb");
 
 
@@ -10,15 +11,19 @@ async function reviews() {
         await client.connect();
         const database = client.db("cycle-mart");
         const reviews = database.collection("reviews");
-        reviewsRouter.post("/reviews", async (req, res) => {
+
+
+        reviewsRouter.post("/", checkUser, async (req, res) => {
             const result = await reviews.insertOne(req.body);
             res.json(result);
         });
+
         reviewsRouter.get("/", async (req, res) => {
             const result = await reviews.find({}).toArray();
             res.send(result);
         });
-        reviewsRouter.get("/:email", async (req, res) => {
+
+        reviewsRouter.get("/:email", checkUser, async (req, res) => {
             const email = req.params.email;
             const quary = { email: email };
             const result = await reviews.find(quary).toArray();

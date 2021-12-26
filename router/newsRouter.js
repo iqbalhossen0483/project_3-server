@@ -1,4 +1,5 @@
 const express = require("express");
+const checkUser = require("../middleWare/userMiddleware");
 const mongoDb = require("../mongoDb");
 
 
@@ -11,7 +12,7 @@ async function news() {
         const database = client.db("cycle-mart");
         const news = database.collection("news");
 
-        newsRouter.post("/", async (req, res) => {
+        newsRouter.post("/", checkUser, async (req, res) => {
             const result = await news.insertOne(req.body);
             res.json(result)
         });

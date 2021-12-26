@@ -16,12 +16,12 @@ async function products() {
                 const result = await products.find({}).toArray();
                 res.send(result)
             })
-            .post((req, res) => {
+            .post(checkUser, (req, res) => {
                 products.insertOne(req.body)
                     .then(result => res.send(result))
                     .catch(err => res.send(err))
             })
-            .put(async (req, res) => {
+            .put(checkUser, async (req, res) => {
                 const id = req.body.id;
                 const filter = { _id: ObjectId(id) };
                 const updateDoc = { $set: req.body }
@@ -127,7 +127,7 @@ async function products() {
         });
 
         //delete product by id
-        productRouter.delete("/:id", async (req, res) => {
+        productRouter.delete("/:id", checkUser, async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) };
             const result = await products.deleteOne(filter);
