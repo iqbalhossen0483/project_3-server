@@ -90,7 +90,7 @@ async function users() {
             const filter = { email: req.body.email };
             const update = {
                 $set: {
-                    roll: "admin"
+                    role: "admin"
                 }
             };
             const result = await users.updateOne(filter, update);
