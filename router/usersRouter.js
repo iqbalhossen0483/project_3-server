@@ -19,7 +19,18 @@ async function users() {
             const user = { $set: req.body };
             const options = { upsert: true };
             const result = await users.updateOne(filter, user, options);
-            res.json(result)
+            if(result.upsertedId){
+                const token = jwt.sign({
+                        admin: false,
+                        user: req.body
+                    }, process.env.JWT_SECRATE, {
+                        expiresIn: "7d"
+                    }); 
+                res.send({
+                    admin: false,
+                    token
+                });
+            }
         });
 
         //log in user and get token for browsing
