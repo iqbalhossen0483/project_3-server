@@ -17,7 +17,7 @@ const menus = async () => {
             const result = await categoryMenus.insertOne(req.body);
             res.send(result);
         });
-        menuRouter.get("/", checkUser, async (req, res) => {
+        menuRouter.get("/", async (req, res) => {
             const result = await categoryMenus.find({}).toArray();
             res.send(result);
         });
