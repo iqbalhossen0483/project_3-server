@@ -27,7 +27,7 @@ async function users() {
             const filter = { email: req.params.email };
             const user = await users.findOne(filter);
             try {
-                if (user?.roll === "admin") {
+                if (user?.role === "admin") {
                     const token = jwt.sign({
                         admin: true,
                         user
