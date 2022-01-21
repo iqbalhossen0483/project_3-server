@@ -80,7 +80,7 @@ async function users() {
             if (user.email === email) {
                 res.send(user);
             } else {
-                res.status(500).send("No user found")
+                res.status(500).json("No user found")
             }
         });
 
