@@ -86,7 +86,7 @@ async function users() {
 
 
         //user profile update
-        usersRouter.put("/update/user/:email",
+        usersRouter.put("/updateUser",
             multer.single('profile'),
             uploadProfile,
             async (req, res) => {
@@ -103,7 +103,7 @@ async function users() {
                 }
                 try {
                     users.updateOne(query, docs)
-                    .then(data => {
+                        .then(data => {
                         if (data.modifiedCount > 0) {
                             res.send(data);
                         }
