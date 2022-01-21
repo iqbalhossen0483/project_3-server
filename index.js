@@ -50,5 +50,5 @@ app.get("/", (req, res) => {
     res.send("it is runnig")
 });
 app.listen(port, () => {
-    console.log("server runnig")
+    console.log("server runnig", port);
 });

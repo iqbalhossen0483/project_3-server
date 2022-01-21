@@ -2,6 +2,9 @@ const express = require("express");
 const mongoDb = require("../mongoDb");
 const jwt = require('jsonwebtoken');
 const checkUser = require("../middleWare/userMiddleware");
+const multer = require("../middleWare/multer/multer");
+const uploadProfile = require("../middleWare/cloudinary/upload/uploadProfile");
+const deleteImage = require("../middleWare/cloudinary/deleteImage/deleteImage");
 
 
 const usersRouter = express.Router();
@@ -79,6 +82,40 @@ async function users() {
             } else {
                 res.status(500).send("No user found")
             }
+        });
+
+
+        //user profile update
+        usersRouter.put("/update/user/:email",
+            multer.single('profile'),
+            uploadProfile,
+            async (req, res) => {
+
+                // //delete if img exist in cloudinary
+                if (req.body.existingImg) {
+                    deleteImage(req.body.existingImg);
+                };
+
+                //update user to database
+                const query = { email: req.params.email };
+                const docs = {
+                    $set: req.body
+                }
+                try {
+                    users.updateOne(query, docs)
+                    .then(data => {
+                        if (data.modifiedCount > 0) {
+                            res.send(data);
+                        }
+                        else {
+                            deleteImage(req.body.imgId);
+                            res.status(500).send({ message: "no user found" });
+                        }
+                    })
+                } catch (err) {
+                    deleteImage(req.body.imgId);
+                    res.status(500).send({ message: err });
+                }
         })
 
         //user's product collection update
