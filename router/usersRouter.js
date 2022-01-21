@@ -90,20 +90,20 @@ async function users() {
             multer.single('profile'),
             uploadProfile,
             async (req, res) => {
-
                 // //delete if img exist in cloudinary
                 if (req.body.existingImg) {
                     deleteImage(req.body.existingImg);
                 };
 
                 //update user to database
-                const query = { email: req.params.email };
+                const query = { email: req.body.email };
                 const docs = {
                     $set: req.body
                 }
                 try {
                     users.updateOne(query, docs)
                         .then(data => {
+                            console.log(data);
                         if (data.modifiedCount > 0) {
                             res.send(data);
                         }
@@ -113,6 +113,7 @@ async function users() {
                         }
                     })
                 } catch (err) {
+                    console.log(err);
                     deleteImage(req.body.imgId);
                     res.status(500).send({ message: err });
                 }
