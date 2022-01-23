@@ -9,7 +9,7 @@ module.exports = uPloadProfile = (req, res, next) => {
         folder: "cycle-mart/products",
         use_filename: true,
         transformation: [
-            { height: 300, width: 300, crop: "thumb"}
+            { height: 300, width: 300}
         ]
     }).then(result => {
         req.body.imgUrl = result.secure_url;
