@@ -1,7 +1,10 @@
 const express = require("express");
 const mongoDb = require("../mongoDb");
 const ObjectId = require('mongodb').ObjectId;
-const checkUser = require("../middleWare/userMiddleware")
+const multer = require("../middleWare/multer/multer");
+const checkUser = require("../middleWare/userMiddleware");
+const deleteImage = require("../middleWare/cloudinary/deleteImage/deleteImage");
+const productImgUpload = require("../middleWare/cloudinary/upload/productImgUpload");
 
 const productRouter = express.Router();
 const client = mongoDb();
@@ -17,18 +20,38 @@ async function products() {
                 const result = await products.find({}).toArray();
                 res.send(result)
             })
-            .post(checkUser, (req, res) => {
-                products.insertOne(req.body)
-                    .then(result => res.send(result))
-                    .catch(err => res.send(err))
+            .post(checkUser,
+                multer.single("img"),
+                productImgUpload,
+                (req, res) => {
+                    delete req.body.img;
+
+                    products.insertOne(req.body)
+                        .then(result => res.send(result))
+                        .catch(err => {
+                            deleteImage(req.body.imgId);
+                            res.send(err)
+                        })
             })
-            .put(checkUser, async (req, res) => {
-                const id = req.body.id;
-                const filter = { _id: ObjectId(id) };
-                const updateDoc = { $set: req.body }
-                const result = await products.updateOne(filter, updateDoc);
-                res.json(result);
-            })
+            .put(checkUser,
+                multer.single("img"),
+                productImgUpload,
+                async (req, res) => {
+                    if (req.body.imgId) {
+                        deleteImage(req.body.imgId);
+                    }
+                    try {
+                        const id = req.body.id;
+                        console.log(id);
+                        const filter = { _id: ObjectId(id) };
+                        const updateDoc = { $set: req.body };
+                        const result = await products.updateOne(filter, updateDoc);
+                        res.send(result);
+                    } catch (err) {
+                        deleteImage(req.body.imgId);
+                        res.status(500).send({ message: "There was an server side error" });
+                    }
+                })
 
         //products for home page
         productRouter.get("/home", async (req, res) => {
