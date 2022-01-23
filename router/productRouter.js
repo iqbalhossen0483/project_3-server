@@ -37,20 +37,16 @@ async function products() {
                 multer.single("img"),
                 productImgUpload,
                 async (req, res) => {
-                    if (req.body.imgId) {
-                        deleteImage(req.body.imgId);
+                    if (req.body.existImg) {
+                        deleteImage(req.body.existImg);
                     }
-                    try {
-                        const id = req.body.id;
-                        console.log(id);
-                        const filter = { _id: ObjectId(id) };
-                        const updateDoc = { $set: req.body };
-                        const result = await products.updateOne(filter, updateDoc);
-                        res.send(result);
-                    } catch (err) {
-                        deleteImage(req.body.imgId);
-                        res.status(500).send({ message: "There was an server side error" });
-                    }
+                    const id = req.body.id;
+                    delete req.body.id;
+                    delete req.body.existImg;
+                    const filter = { _id: ObjectId(id) };
+                    const updateDoc = req.body ;
+                    const result = await products.replaceOne(filter, updateDoc);
+                    res.send(result);
                 })
 
         //products for home page
@@ -153,6 +149,7 @@ async function products() {
         //delete product by id
         productRouter.delete("/:id", checkUser, async (req, res) => {
             const id = req.params.id;
+            deleteImage(req.body.imgId);
             const filter = { _id: ObjectId(id) };
             const result = await products.deleteOne(filter);
             res.send(result);
