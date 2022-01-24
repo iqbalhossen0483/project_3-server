@@ -4,7 +4,7 @@ const ObjectId = require('mongodb').ObjectId;
 const multer = require("../middleWare/multer/multer");
 const checkUser = require("../middleWare/userMiddleware");
 const deleteImage = require("../middleWare/cloudinary/deleteImage/deleteImage");
-const productImgUpload = require("../middleWare/cloudinary/upload/productImgUpload");
+const uploadImages = require("../middleWare/cloudinary/upload/uploadImages");
 
 const productRouter = express.Router();
 const client = mongoDb();
@@ -22,7 +22,7 @@ async function products() {
             })
             .post(checkUser,
                 multer.single("img"),
-                productImgUpload,
+                uploadImages("cycle-mart/products"),
                 (req, res) => {
                     delete req.body.img;
 
@@ -35,7 +35,7 @@ async function products() {
             })
             .put(checkUser,
                 multer.single("img"),
-                productImgUpload,
+                uploadImages("cycle-mart/products"),
                 async (req, res) => {
                     if (req.body.existImg) {
                         deleteImage(req.body.existImg);
