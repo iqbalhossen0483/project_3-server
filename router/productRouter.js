@@ -3,9 +3,9 @@ const mongoDb = require("../mongoDb");
 const ObjectId = require('mongodb').ObjectId;
 const multer = require("../middleWare/multer/multer");
 const checkUser = require("../middleWare/userMiddleware");
-const deleteImage = require("../middleWare/cloudinary/deleteImage/deleteImage");
 const uploadImages = require("../middleWare/cloudinary/upload/uploadImages");
-
+const deleteImage = require("../middleWare/cloudinary/deleteImage/deleteImage");
+const productImgUpload = require("../middleWare/cloudinary/upload/productImgUpload");
 const productRouter = express.Router();
 const client = mongoDb();
 
@@ -20,16 +20,25 @@ async function products() {
                 const result = await products.find({}).toArray();
                 res.send(result)
             })
-            .post(checkUser,
-                multer.single("img"),
-                uploadImages("cycle-mart/products"),
+            .post(
+                checkUser,
+                multer.fields([
+                    { name: "img", maxCount: 1 },
+                    {name: "gallery", maxCount: 3}
+                ]),
+                productImgUpload,
                 (req, res) => {
-                    delete req.body.img;
-
                     products.insertOne(req.body)
                         .then(result => res.send(result))
                         .catch(err => {
-                            deleteImage(req.body.imgId);
+                            if (req.body.productImg.imgId) {
+                                deleteImage(req.body.productImg.imgId);
+                            }
+                            if (req.body.imgGallery?.length) {
+                                req.body.imgGallery.forEach(img => {
+                                deleteImage(img.imgId);
+                                })
+                            };
                             res.send(err)
                         })
             })

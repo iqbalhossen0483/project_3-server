@@ -13,10 +13,12 @@ module.exports = multer({
         }
     }),
     fileFilter: (req, file, cb) => {
-        const ext = path.extname(file.originalname);
-        if (ext !== ".jpg" && ext !== ".JPG" && ext !== ".jpeg" && ext !== ".png") {
-            cb(new Error("file type is not allowed"));
-            return;
+        if (file.mimetype === ".jpg" ||
+            file.mimetype === ".JPG" ||
+            file.mimetype === ".jpeg" ||
+            file.mimetype === ".png") {
+                cb(new Error("file type is not allowed"));
+                return;
         }
         cb(null, true);
     }

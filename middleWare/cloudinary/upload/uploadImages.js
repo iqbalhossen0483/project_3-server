@@ -10,7 +10,7 @@ module.exports = function uploadImages(folder) {
             folder: folder,
             use_filename: true,
             transformation: [
-                { height: 436, width: 640}
+                { height: 436, width: 640 }
             ]
         }).then(result => {
             req.body.imgUrl = result.secure_url;
@@ -21,3 +21,6 @@ module.exports = function uploadImages(folder) {
         })
     };
 }
+
+
+
