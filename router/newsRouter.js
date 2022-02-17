@@ -18,16 +18,16 @@ async function news() {
         newsRouter.post("/",
             checkUser,
             multer.single("img"),
-            // uploadeImages("cycle-mart/news"),
+            uploadeImages("cycle-mart/news"),
             async (req, res) => {
                 try {
-                    res.status(500).json({ err: "there was an server side error" });
+                    // res.status(500).json({ err: "there was an server side error" });
                     // throw new Error({ err: "there was an server side error" });
-                    // const result = await news.insertOne(req.body);
-                    // res.json(result)
+                    const result = await news.insertOne(req.body);
+                    res.json(result)
                 }
                 catch (err) {
-                    // deleteImage(req.imgId);
+                    deleteImage(req.imgId);
                     res.status(500).json(err);
                 }
             });
