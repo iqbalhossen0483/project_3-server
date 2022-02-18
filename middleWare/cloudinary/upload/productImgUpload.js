@@ -1,4 +1,5 @@
 const cloudinary = require('../cloudinary.confiq');
+const deleteImage = require('../deleteImage/deleteImage');
 
 
 //uploder
@@ -14,21 +15,36 @@ async function uploader(file) {
 }
 
 module.exports = productImgUpload = async (req, res, next) => {
-   
-    const file = req.files["img"][0].path;
+
+    //delete existing images....
+    if (req.body.productImgId) {
+        deleteImage(req.body.productImgId);
+    }
+    if (req.body.imgGallery) {
+        req.body.Gallery.forEach(img => {
+            deleteImage(img.imgId);
+        })
+    }
+
+    const file = req.files["img"][0];
     const files = req.files["gallery"];
 
     try {
-        const result = await uploader(file);
-        const productImg = {
-            imgUrl: result.secure_url,
-            imgId: result.public_id
-        };
-        req.body.productImg = productImg;
+        //product image upload
+        if (file) {
+            const result = await uploader(file.path);
+            const productImg = {
+                imgUrl: result.secure_url,
+                imgId: result.public_id
+            };
+            req.body.productImg = productImg;
+        }
 
+        //check product gallery exist or not
         if (!files.length) {
                 next();
-            }
+        }
+        //upload gallery images
         else {
             const gallery = [];
             for (const file of files) {

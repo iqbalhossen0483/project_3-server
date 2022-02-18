@@ -3,7 +3,6 @@ const mongoDb = require("../mongoDb");
 const ObjectId = require('mongodb').ObjectId;
 const multer = require("../middleWare/multer/multer");
 const checkUser = require("../middleWare/userMiddleware");
-const uploadImages = require("../middleWare/cloudinary/upload/uploadImages");
 const deleteImage = require("../middleWare/cloudinary/deleteImage/deleteImage");
 const productImgUpload = require("../middleWare/cloudinary/upload/productImgUpload");
 const productRouter = express.Router();
@@ -43,18 +42,19 @@ async function products() {
                         })
             })
             .put(checkUser,
-                multer.single("img"),
-                uploadImages("cycle-mart/products"),
+                multer.fields([
+                    { name: "img", maxCount: 1 },
+                    {name: "gallery", maxCount: 3}
+                ]),
+                productImgUpload,
                 async (req, res) => {
-                    if (req.body.existImg) {
-                        deleteImage(req.body.existImg);
-                    }
-                    const id = req.body.id;
+                    console.log(req.body);
                     delete req.body.id;
-                    delete req.body.existImg;
-                    const filter = { _id: ObjectId(id) };
-                    const updateDoc = req.body ;
-                    const result = await products.replaceOne(filter, updateDoc);
+                    delete req.body.productImgId;
+                    delete req.body.Gallery;
+                    const filter = { _id: ObjectId(req.body.id) };
+                    const updateDoc = { $set: req.body };
+                    const result = await products.updateOne(filter, updateDoc);
                     res.send(result);
                 })
 
