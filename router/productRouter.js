@@ -48,11 +48,11 @@ async function products() {
                 ]),
                 productImgUpload,
                 async (req, res) => {
-                    console.log(req.body);
+                    const id = req.body.id;
                     delete req.body.id;
                     delete req.body.productImgId;
                     delete req.body.Gallery;
-                    const filter = { _id: ObjectId(req.body.id) };
+                    const filter = { _id: ObjectId(id) };
                     const updateDoc = { $set: req.body };
                     const result = await products.updateOne(filter, updateDoc);
                     res.send(result);
