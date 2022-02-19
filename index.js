@@ -2,10 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const mongoDb = require("./mongoDb");
 const productRouter = require("./router/productRouter");
-const reviewsRouter = require("./router/reviewsRouter");
+const reviewsRouter = require("./router/reviewRouter/reviewsRouter");
 const newsRouter = require("./router/newsRouter/newsRouter");
 const ordersRouter = require("./router/orderRoute/ordersRouter");
-const usersRouter = require("./router/usersRouter");
+const usersRouter = require("./router/usersRouter/usersRouter");
 const menuRouter = require("./router/menuRouter/MenusRouter");
 const app = express();
 const port = process.env.PORT || 5000;
@@ -49,6 +49,7 @@ run().catch(console.dir);
 app.get("/", (req, res) => {
     res.send("it is runnig")
 });
+
 app.listen(port, () => {
     console.log("server runnig", port);
 });
