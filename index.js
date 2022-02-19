@@ -6,9 +6,9 @@ const reviewsRouter = require("./router/reviewsRouter");
 const newsRouter = require("./router/newsRouter");
 const ordersRouter = require("./router/ordersRouter");
 const usersRouter = require("./router/usersRouter");
-const menuRouter = require("./router/MenusRouter");
+const menuRouter = require("./router/menuRouter/MenusRouter");
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
