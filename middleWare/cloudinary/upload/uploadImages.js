@@ -1,6 +1,6 @@
 const cloudinary = require('../cloudinary.confiq');
 
-module.exports = function uploadImages(folder) {
+module.exports = function uploadImages(folder, height, width) {
     return uPloadProfile = (req, res, next) => {
         if (!req.file) {
             return next();
@@ -10,7 +10,7 @@ module.exports = function uploadImages(folder) {
             folder: folder,
             use_filename: true,
             transformation: [
-                { height: 436, width: 640 }
+                { height: height, width: width }
             ]
         }).then(result => {
             req.body.imgUrl = result.secure_url;

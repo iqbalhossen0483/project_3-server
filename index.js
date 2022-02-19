@@ -7,6 +7,8 @@ const newsRouter = require("./router/newsRouter/newsRouter");
 const ordersRouter = require("./router/orderRoute/ordersRouter");
 const usersRouter = require("./router/usersRouter/usersRouter");
 const menuRouter = require("./router/menuRouter/MenusRouter");
+const sliderRouter = require("./router/sliderRouder/sliderRouter");
+const offerRouter = require("./router/offerRouter/offerRouter");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -38,6 +40,12 @@ async function run() {
 
         //menus
         app.use("/menus", menuRouter);
+
+        //slider
+        app.use("/sliders", sliderRouter);
+
+        //offer
+        app.use("/offers", offerRouter);
     }
     finally {
 

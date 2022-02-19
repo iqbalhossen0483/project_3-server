@@ -10,7 +10,7 @@ const newsRouter = express.Router();
 newsRouter.post("/",
     checkUser,
     multer.single("img"),
-    uploadeImages("cycle-mart/news"),
+    uploadeImages("cycle-mart/news", 436, 640),
     postNews
 );
         
