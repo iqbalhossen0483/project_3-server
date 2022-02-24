@@ -14,7 +14,8 @@ const {
     getProductByType,
     getProductByPrice,
     getProductById,
-    deleteProduct
+    deleteProduct,
+    searchProduct
 } = require("./handler");
 
 productRouter.route("/")
@@ -40,6 +41,8 @@ productRouter.route("/")
 //products for home page
 productRouter.get("/home", getProductsForHome);
 
+//search products
+productRouter.get("/searchProduct/:text", searchProduct);
 
 //category product
 productRouter.get("/category/:name", getCategoryProduct)

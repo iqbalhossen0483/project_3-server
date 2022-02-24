@@ -55,6 +55,13 @@ async function getProductsForHome(req, res) {
     res.send(result)
 };
 
+//search products
+async function searchProduct(req, res) {
+    const text = req.params.text;
+    const result = await products.find({ $text: { $search: text }}).toArray();
+    res.send(result);
+}
+
 
 //category product
 async function getCategoryProduct(req, res) {
@@ -169,5 +176,6 @@ module.exports = {
     getProductByPrice,
     getProductById,
     deleteProduct,
-    getRandomProduct
+    getRandomProduct,
+    searchProduct
 }
