@@ -52,7 +52,7 @@ async function updateProduct(req, res) {
 //products for home page
 async function getProductsForHome(req, res) {
     const result = await products.find({}).limit(8).toArray();
-    res.send(result)
+    res.send(result);
 };
 
 //search products
