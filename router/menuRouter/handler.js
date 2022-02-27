@@ -26,6 +26,19 @@ async function getMenu  (req, res) {
     res.send(result);
 };
 
+//update menu
+async function updateMenu(req, res, next) {
+    try {
+        const filter = { _id: ObjectId(req.params.id) };
+        const docs = { $push: { subMenus: req.body.name } };
+        const result = await categoryMenus.updateOne(filter, docs);
+        res.send(result);
+    }
+    catch (err) {
+        next(err);
+    }
+};
+
 //delete menu handler
 async function deleteMenu (req, res) {
     const id = req.params.id;
@@ -33,4 +46,22 @@ async function deleteMenu (req, res) {
     res.send(result);
 };
 
-module.exports = { postMenu, getMenu, deleteMenu };
+async function deleteSubCategory(req, res) {
+    const filter1 = { _id: ObjectId(req.body.menuId) };
+    const filter2 = { $pullAll: { subMenus: [req.body.subText] } };
+    try {
+        const result = await categoryMenus.updateOne(filter1, filter2);
+        res.send(result);
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
+module.exports = {
+    postMenu,
+    getMenu,
+    deleteMenu,
+    updateMenu,
+    deleteSubCategory
+};

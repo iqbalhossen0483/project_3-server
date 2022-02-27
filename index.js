@@ -1,19 +1,20 @@
-const express = require("express");
-const cors = require("cors");
-const mongoDb = require("./mongoDb");
 const productRouter = require("./router/productRouter/productRouter");
 const reviewsRouter = require("./router/reviewRouter/reviewsRouter");
-const newsRouter = require("./router/newsRouter/newsRouter");
+const sliderRouter = require("./router/sliderRouder/sliderRouter");
 const ordersRouter = require("./router/orderRoute/ordersRouter");
 const usersRouter = require("./router/usersRouter/usersRouter");
-const menuRouter = require("./router/menuRouter/MenusRouter");
-const sliderRouter = require("./router/sliderRouder/sliderRouter");
 const offerRouter = require("./router/offerRouter/offerRouter");
+const menuRouter = require("./router/menuRouter/MenusRouter");
+const newsRouter = require("./router/newsRouter/newsRouter");
+const mongoDb = require("./mongoDb");
+const express = require("express");
+const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.text());
 
 //mongodb
 const client = mongoDb();
