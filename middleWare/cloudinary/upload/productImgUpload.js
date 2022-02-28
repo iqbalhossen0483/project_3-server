@@ -29,6 +29,8 @@ module.exports = productImgUpload = async (req, res, next) => {
     const file = req.files["img"][0];
     const files = req.files["gallery"];
 
+    if (!file && !files.length) next();
+
     try {
         //product image upload
         if (file) {
